@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ERP - login</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body id="LoginForm">
+    <div class="container">
+        <div class="login-form">
+            <div class="main-div">
+                <div class="panel">
+                    <h2>Вход</h2>
+                </div>
+                <form id="Login" name="LoginForm" action="/auth/login/" method="post">
+                    {% csrf_token %}
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    {% endif %}
+                    <div class="form-group">
+                        <input type="text" name="username" class="form-control" id="inputEmail" placeholder="Потребителско име">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Парола">
+                    </div>
+
+                    {% if invalid %}
+                        <p style="color: red;">Невалидно потребителско име или парола !</p>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Вход</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>

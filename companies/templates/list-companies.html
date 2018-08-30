@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--<div class="container">-->
+    <div class="top">
+        {% if perms.companies.add %}
+            <a href="/companies/add" class="btn btn-dark add-row-btn"> <i class="fas fa-plus"></i> Добавяне на фирма</a>
+        {% endif %}
+        <div class="bbody no-padding">
+            <table class="table">
+                <thead class="thead-dark tf-size">
+                    <tr>
+                        <th scope="col">Име</th>
+                        <th scope="col">МОЛ</th>
+                        <th scope="col">БУЛСТАТ</th>
+                        <th scope="col">ЕИК</th>
+                        <th scope="col">Град</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Имейл</th>
+                        <th scope="col">Телефон</th>
+                        <th scope="col">Подфирма на</th>
+                        <th scope="col">Активна фирма</th>
+                        {% if perms.companies.edit or perms.companies.delete %}
+                            <th scope="col">Опции</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody class="tcompany-body">
+                    {% for company in companies %}
+                        <tr>
+                            <td>{{ company.name }}</td>
+                            <td>{{ company.mrp }}</td>
+                            <td>{{ company.vat }}</td>
+                            <td>{{ company.idn }}</td>
+                            <td>{{ company.city }}</td>
+                            <td>{{ company.address }}</td>
+                            <td>{{ company.email }}</td>
+                            <td>{{ company.phone_number }}</td>
+                            <td>{{ company.getPCompanyName }}</td>
+                            <td>{{ company.getIsActive }}</td>
+                            {% if perms.companies.edit or perms.companies.delete %}
+                                <td>
+                                    {% if perms.companies.edit %}
+                                        <a href="{% url 'edit-company' company.id %}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>
+                                    {% endif %}
+                                    {% if perms.companies.delete %}
+                                        <a href="{% url 'delete-company' company.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if companies.has_other_pages %}
+              <ul class="pagination">
+                {% if companies.has_previous %}
+                  <li><a href="?page={{ companies.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in companies.paginator.page_range %}
+                  {% if companies.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if companies.has_next %}
+                  <li><a href="?page={{ companies.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+        </div>
+    </div>
+<!--</div>-->
+
+{% endblock %}

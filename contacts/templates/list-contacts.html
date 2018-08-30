@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row top">
+        <div class="col-md-6">
+            {% if perms.contacts.add %}
+                <a href="/contacts/add" class="btn btn-dark add-row-btn"> <i class="fas fa-plus"></i> Добавяне на контакт</a>
+            {% endif %}
+        </div>
+        <div class="col-md-6 add-row-btn" style="text-align: right;">
+            <form method="post" action="/contacts/search">
+                {% csrf_token %}
+            <input type="text" name="search" placeholder="Търсене по име">
+            <button type="submit" class="btn btn-warning">Търсене</button>
+        </form>
+        </div>
+        <div class="col-md-12 bbody no-padding">
+            <table class="table">
+                <thead class="thead-dark tf-size">
+                    <tr>
+                        <th scope="col">Име</th>
+                        <th scope="col">Телефон</th>
+                        <th scope="col">Имейл</th>
+                        <th scope="col">Фирма</th>
+                        {% if perms.contacts.edit or perms.contacts.delete %}
+                            <th scope="col">Опции</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                        <tr>
+                            <td>{{ contact.name }}</td>
+                            <td>{{ contact.phone_number }}</td>
+                            <td>{{ contact.email }}</td>
+                            <td>{{ contact.getIsCompany }}</td>
+                            {% if perms.contacts.edit or perms.contacts.delete %}
+                                <td>
+                                    {% if perms.contacts.edit %}
+                                        <a href="{% url 'edit' contact.id %}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>
+                                    {% endif %}
+                                    {% if perms.contacts.delete %}
+                                        <a href="{% url 'delete' contact.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if contacts.has_other_pages %}
+              <ul class="pagination">
+                {% if contacts.has_previous %}
+                  <li><a href="?page={{ contacts.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in contacts.paginator.page_range %}
+                  {% if contacts.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if contacts.has_next %}
+                  <li><a href="?page={{ contacts.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+    </div>
+</div>
+
+{% endblock %}

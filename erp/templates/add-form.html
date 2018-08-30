@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row form-top">
+        <div class="col-md-6 offset-md-3 form-body">
+            <h3 style="text-align: center;">{{ formName }}</h3>
+            <form method="post">
+
+                {% csrf_token %}
+                {{ form}}
+
+                <button type="submit" class="btn btn-dark">Запазване</button>
+                <button id="cancel" class="btn btn-danger right">Отказ</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#cancel").click(function(){
+        window.history.back();
+    });
+</script>
+
+{% endblock %}
+

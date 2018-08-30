@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            {% for app in apps %}
+                {% if app.code != 'reports' %}
+                    <div class="col-md-3" style="padding-top: 28px;">
+                        <div class="card card-content-body dark">
+                            <div class="card-body">
+                                <a href="{{ app.url }}" class="card-title">{{ app.name }}</a>
+                                <p class="card-text">{{ app.description }}</p>
+                                <!--<p class="card-text">Count</p>-->
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if app.code == 'reports' and user.is_superuser%}
+                    <div class="col-md-3" style="padding-top: 28px;">
+                        <div class="card card-content-body dark">
+                            <div class="card-body">
+                                <a href="{{ app.url }}" class="card-title">{{ app.name }}</a>
+                                <p class="card-text">{{ app.description }}</p>
+                                <!--<p class="card-text">Count</p>-->
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

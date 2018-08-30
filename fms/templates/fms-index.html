@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--<div class="container">-->
+    <div class="top">
+        {% if perms.fms.add %}
+            <a href="/fms/add" class="btn btn-dark add-row-btn"><i class="fas fa-plus"></i> Добавяне на МПС</a>
+        {% endif %}
+        <div class="bbody no-padding">
+            <table class="table">
+                <thead class="thead-dark tf-size">
+                    <tr>
+                        <th scope="col">Рег. номер</th>
+                        <th scope="col">Производител</th>
+                        <th scope="col">Марка/Модел</th>
+                        <th scope="col">Дата на закопуване</th>
+                        <th scope="col">Валидна гаранция до</th>
+                        <th scope="col">Фирма</th>
+                        <th scope="col">Гориво</th>
+                        <th scope="col">Активно МПС</th>
+                        {% if perms.fms.edit or perms.fms.delete %}
+                            <th scope="col">Опции</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vehicle in vehicles %}
+                        <tr>
+                            <td>{{ vehicle.license_plate }}</td>
+                            <td>{{ vehicle.manufacturer }}</td>
+                            <td>{{ vehicle.model }}</td>
+                            <td>{{ vehicle.purchase_date }}</td>
+                            <td>{{ vehicle.warranty_end_date }}</td>
+                            <td>{{ vehicle.company_owner }}</td>
+                            <td>{{ vehicle.getFTypeName }}</td>
+                            <td>{{ vehicle.getIsActive }}</td>
+                            {% if perms.fms.edit or perms.fms.delete %}
+                                <td>
+                                    {% if perms.fms.edit %}
+                                        <a href="{% url 'edit-vehicle' vehicle.id %}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>
+                                    {% endif %}
+                                    {% if perms.fms.delete %}
+                                        <a href="{% url 'delete-vehicle' vehicle.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if vehicles.has_other_pages %}
+              <ul class="pagination">
+                {% if vehicles.has_previous %}
+                  <li><a href="?page={{ vehicles.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in vehicles.paginator.page_range %}
+                  {% if vehicles.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if vehicles.has_next %}
+                  <li><a href="?page={{ vehicles.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+
+        </div>
+    </div>
+<!--</div>-->
+
+{% endblock %}

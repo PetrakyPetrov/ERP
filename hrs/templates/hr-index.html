@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--<div class="container">-->
+    <div style="width: 100%; padding: 0 12px 0;">
+        <div style="width: 300px; float: left;">
+            {% if perms.hrs.add %}
+                <a href="/hr/add" class="btn btn-dark add-row-btn"><i class="fas fa-plus"></i> Добавяне на служител</a>
+            {% endif %}
+        </div>
+        <div style="width: 400px; float: right; text-align: right;">
+            <form method="post" action="/hr/search">
+                    {% csrf_token %}
+                <input type="text" name="search" placeholder="Търсене по тел.номер или фирма" style="width: 265px;">
+                <button type="submit" class="btn btn-warning">Търсене</button>
+            </form>
+        </div>
+    </div>
+    <div class="hr-top">
+
+        <div class="bbody no-padding">
+            <table class="table">
+                <thead class="thead-dark tf-size">
+                    <tr>
+                        <th scope="col">Име</th>
+                        <th scope="col">Дата на раждане</th>
+                        <th scope="col">Телефонен номер</th>
+                        <th scope="col">Имейл</th>
+                        <th scope="col">Пол</th>
+                        <th scope="col">Фирма</th>
+                        <th scope="col">Длъжност</th>
+                        <th scope="col">Заплата</th>
+                        <th scope="col">Дата на назначаване</th>
+                        <th scope="col">Дата на свобождаване</th>
+                        <th scope="col">Активен служител</th>
+                        {% if perms.hrs.edit or perms.hrs.delete %}
+                            <th scope="col">Опции</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                        <tr>
+                            <td>{{ employee.first_name }} {{ employee.second_name }} {{ employee.last_name }}</td>
+                            <td>{{ employee.date_of_birth }}</td>
+                            <td>{{ employee.phone_number }}</td>
+                            <td>{{ employee.email }}</td>
+                            <td>{{ employee.getSexType }}</td>
+                            <td>{{ employee.company }}</td>
+                            <td>{{ employee.job_position.name }}</td>
+                            <td>{{ employee.salary }} лв</td>
+                            <td>{{ employee.date_of_appointment }}</td>
+                            <td>{{ employee.getDateData }}</td>
+                            <td>{{ employee.getIsActiveEmp }}</td>
+                            {% if perms.hrs.edit or perms.hrs.delete %}
+                                <td>
+                                    {% if perms.hrs.edit %}
+                                        <a href="{% url 'edit-employee' employee.id %}" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>
+                                    {% endif %}
+                                    {% if perms.hrs.delete %}
+                                        <a href="{% url 'delete-employee' employee.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+                        <!--<nav aria-label="Page navigation example">-->
+            {% if employees.has_other_pages %}
+              <ul class="pagination">
+                {% if employees.has_previous %}
+                  <li><a href="?page={{ employees.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in employees.paginator.page_range %}
+                  {% if employees.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if employees.has_next %}
+                  <li><a href="?page={{ employees.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+            <!--</nav>-->
+        </div>
+    </div>
+<!--</div>-->
+
+
+
+{% endblock %}

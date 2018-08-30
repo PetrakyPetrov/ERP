@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ERP</title>
+    <!-- Compiled and minified CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!--<link rel="stylesheet" href="/resources/demos/style.css">-->
+
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+</head>
+<body>
+    <!--<nav>-->
+        <!--<div class="nav-wrapper">-->
+            <!--<a href="/news" class="brand-logo">News</a>-->
+        <!--</div>-->
+    <!--</nav>-->
+    <nav class="navbar navbar-dark bg-dark" style="position: fixed; width: 100%; z-index: 999;">
+    <a class="navbar-brand" href="/apps">Приложения</a>
+    <a class="navbar-brand" href="{% url 'logout' %}">Изход</a>
+    </nav>
+    <div class="main-content" style="padding-top: 70px;">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>
